@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+  <head>
+        {% load staticfiles %}
+        <title>DBMS</title>
+        <link rel="stylesheet" href="{% static "css/showup.css" %}">
+        {% block pagelibraries %}{% endblock %}
+
+        <link href="{% static "css/bootstrap.min.css"%}" rel="stylesheet">
+        <link href="{% static "css/ripples.min.css" %}" rel="stylesheet">
+        <link href="{% static "css/material-wfont.min.css" %}" rel="stylesheet">
+    </head>
+    <body>
+     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">DBMS</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+
+          <li><a id="feedback" href="/customer">New Customer</a></li>
+           <li><a id="feedback" href="/employee">New Employee</a></li>
+            <li><a id="feedback" href="/part">New Part</a></li>
+             <li><a id="feedback" href="/order">New Order</a></li>
+              <li><a id="feedback" href="/orderpart">New Part_Order</a></li>
+          </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+    </nav>
+    <a href="#" style="right: 70px;" class="btn back-to-top btn-dark btn-fixed-bottom"> <span class="glyphicon glyphicon-chevron-up"></span> </a>
+
+    <div class="container">
+<br/>
+<form class="text-center well well-sm" action="/query/" method="POST" enctype="text/plain">
+	<input type="text" name="sql" placeholder="Enter any SQL Query!" />
+	<input class="btn" type="submit" value="Search" />
+</form>
+{% block content %}
+<div >
+	<h2>Customers</h2>
+	{% for x in customers %}
+	
+	<li><a href="/customer/{{x.pk}}">{{x}}</a>  <a href="/customer/{{x.pk}}/delete/">X</a></li> 
+	{% endfor %}
+
+</div>
+<div >
+	<h2>Employees</h2>
+	{% for z in employees %}
+	
+	<li><a href="/employee/{{z.pk}}">{{z}}</a>    <a href="/employee/{{z.pk}}/delete/">X</a></li> 
+	{% endfor %}
+</div>
+<div>
+
+
+	<h2>Parts</h2>
+	{% for p in parts %}
+	
+	<li><a href="/part/{{p.pk}}/">{{p}}</a>  <a href="/part/{{p.pk}}/delete/">X</a></li>
+	{% endfor %}
+
+</div>
+<div >
+
+	<h2>Orders</h2>
+	 
+	{% for y in orders %}
+		<li><a href="/order/{{y.pk}}/">{{y}}</a> {{parts_for_order}}<a href="/orderpart">+</a> <a href="/order/{{y.pk}}/delete/" style="margin-left:2em"> X</a></li>
+		
+	{% endfor %}
+</div>
+{% endblock %}
+</ul>
+</div>
+	<script src="{% static "js/jquery-2.1.1.min.js" %}"></script>
+         <script src="{% static "js/showup.js" %}"></script>
+        <script src="{% static "js/bootstrap.min.js" %}"></script>
+             <script src="{% static "js/ripples.js" %}"></script>
+             <script src="{% static "js/material.min.js" %}"></script>
+
+    <script>
+              $().showUp('.navbar', {
+              upClass: 'navbar-show',
+              downClass: 'navbar-hide'
+              });
+      </script>
+
+
+        <script>
+            $(document).ready(function() {
+                $.material.init();
+            });
+        </script>
+    </body>

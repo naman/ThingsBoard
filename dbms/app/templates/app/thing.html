@@ -1,0 +1,22 @@
+{% extends "app/index.html" %}
+{% block content %}
+
+<div class="jumbotron">
+  <div align="center" class="container">
+  
+    <h1>Insert</h1>  
+    <form role="form"  method="post" enctype="multipart/form-data">
+     
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+    
+  </div>
+</div>
+<div class="container">
+    
+</div>
+
+
+{% endblock %}
