@@ -10,6 +10,12 @@ def detect(request):
     # detect new devices
     # check them in DB
     # if not present, add device in DB
+    logfile = open("/home/pi/Documents/BTP/ap.log", "r")
+    for line in logfile.readlines():
+        if ("AP-STA-CONNECTED" in line):
+            print "New device connected"
+            spl = line.split(" ")
+            print "MAC: " + spl[3]
     return render(request, 'app/detect_devices.html')
     
 def owner(request):
