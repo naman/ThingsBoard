@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+PROJECT_ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), ".."),
+)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -43,14 +47,14 @@ INSTALLED_APPS = (
 )
 #
 MIDDLEWARE_CLASSES = (
-#     'django.contrib.sessions.middleware.SessionMiddleware',
+    #     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-#     'django.middleware.csrf.CsrfViewMiddleware',
-#     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-#     'django.contrib.messages.middleware.MessageMiddleware',
-#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#     'django.middleware.security.SecurityMiddleware',
+    #     'django.middleware.csrf.CsrfViewMiddleware',
+    #     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #     'django.contrib.messages.middleware.MessageMiddleware',
+    #     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #     'django.middleware.security.SecurityMiddleware',
 )
 
 ROOT_URLCONF = 'thingsboard.urls'
@@ -77,18 +81,12 @@ WSGI_APPLICATION = 'thingsboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE':'django.db.backends.mysql',
-#         'NAME': 'mail_order',
-#         'USER': 'root',
-#         'PASSWORD': 'naman',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
-
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': PROJECT_ROOT + '/ThingsBoard.db',
+    }
+}
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 

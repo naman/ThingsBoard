@@ -13,14 +13,12 @@
         </div>
         <div class="container panel-body collapse" id="collapseExample{{ things.id }}">
             <h4>
-            	Description: {{ things.description }}
+                Description: {{ things.description }}
             </h4>
             <h4>
-            	
-            </h4>
-    		{% for event in things.events %}
-        		{{event}} <br/>
-    		{% endfor %}
+                
+            </h4> {% for event in things.events %} {{event}}
+            <br/> {% endfor %}
         </div>
     </div>
     {% endfor %}
