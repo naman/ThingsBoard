@@ -4,6 +4,13 @@ import string
 from app.models import *
 
 
+def add_connection():
+    '''
+    add a new connection TCP/UDP/ARP/DNS whatever
+    '''
+    return 1
+
+
 def fetch_ip(mac):
     f = open('/proc/net/arp')
     ip = ""
