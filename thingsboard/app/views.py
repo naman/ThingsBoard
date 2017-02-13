@@ -3,6 +3,8 @@ import random
 import string
 from app.models import *
 
+import socket
+import binascii
 
 def add_connection():
     '''
@@ -38,12 +40,18 @@ def block_url(url, source_device_ip):
     # take url,
     # get its ip from DNS
     # convert ip to hex to suit snort format
-    # make rule with hostname as source device's ip
+    # make rule with host IP as source device's ip
     # give a unique sid for the rule
     '''
+
+    url_to_block = "app.hubbleconnected.com"
+    #get ip from dns
+    ip = socket.gethostbyname(url_to_block)
+    hex_ip = binascii.hexlify(socket.inet_aton(ip))
+
     f = open("/etc/snort/rules/local.rules", 'a')
-    rule = ""
-    f.write(rule)
+    rule = "drop tcp any any <> hex_ip any (content: "web url"; msg: "Access Denied"; react:block; sid:1000015;"
+    f.write(rule)    
 
 
 def things(request):
