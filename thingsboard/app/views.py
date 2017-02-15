@@ -2,6 +2,8 @@ from django.shortcuts import render
 import random
 import string
 from app.models import *
+from django.http import HttpRequest
+
 
 import socket
 import binascii
@@ -32,7 +34,18 @@ def owner(request):
     # get owner from the DB, if current request is from owner, show this page
     # else redirect to home
     '''
-    return render(request, 'app/owner.html')
+    host_ip = request.get_host().split(":")[0]
+    
+    t = {}
+
+    try:
+        t = Thing.objects.get(ip_address=host_ip)
+        t.admin_or_not = True
+        t.save()
+    except Exception as e:
+        print "No owner wrt server!"
+
+    return render(request, 'app/owner.html',{'t': t})
 
 
 def block_url(url, source_device_ip):
@@ -50,7 +63,7 @@ def block_url(url, source_device_ip):
     hex_ip = binascii.hexlify(socket.inet_aton(ip))
 
     f = open("/etc/snort/rules/local.rules", 'a')
-    rule = "drop tcp any any <> hex_ip any (content: "web url"; msg: "Access Denied"; react:block; sid:1000015;"
+    rule = 'drop tcp any any <> hex_ip any (content: "web url"; msg: "Access Denied"; react:block; sid:1000015;'
     f.write(rule)    
 
 
@@ -77,21 +90,23 @@ def things(request):
     # check them in DB
     # if not present, add device in DB
     '''
-
-    f = open("../../ap.log")
-    for line in f.readlines():
-        if ("AP-STA-CONNECTED" in line):
-            spl = line.split()
-            mac = spl[3].strip()
-            if len(Thing.objects.filter(mac_address=mac)) < 1:
-                print "New device found!"
-                # add a new device, not already present
-                unique_name = ''.join(random.choice(
-                    string.ascii_uppercase + string.digits) for _ in range(6))
-                thing = Thing(name=unique_name, mac_address=mac,
-                              ip_address=fetch_ip(mac), admin_or_not=False)
-                thing.save()
-            else:
-                print "Device already in the DB!"
+    try:
+        f = open("../../ap.log")
+        for line in f.readlines():
+            if ("AP-STA-CONNECTED" in line):
+                spl = line.split()
+                mac = spl[3].strip()
+                if len(Thing.objects.filter(mac_address=mac)) < 1:
+                    print "New device found!"
+                    # add a new device, not already present
+                    unique_name = ''.join(random.choice(
+                        string.ascii_uppercase + string.digits) for _ in range(6))
+                    thing = Thing(name=unique_name, mac_address=mac,
+                                  ip_address=fetch_ip(mac), admin_or_not=False)
+                    thing.save()
+                else:
+                    print "Device already in the DB!"
+    except Exception as e:
+        print "No file called ap.log"
     context = Thing.objects.all()
     return render(request, 'app/things.html', {'things': context})
