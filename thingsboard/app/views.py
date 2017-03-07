@@ -2,11 +2,11 @@ from django.shortcuts import render
 import random
 import string
 from app.models import *
-from django.http import HttpRequest
-
+from uuid import get_node
 
 import socket
 import binascii
+
 
 def add_connection():
     '''
@@ -35,7 +35,7 @@ def owner(request):
     # else redirect to home
     '''
     host_ip = request.get_host().split(":")[0]
-    
+    print host_ip
     t = {}
 
     try:
@@ -45,7 +45,7 @@ def owner(request):
     except Exception as e:
         print "No owner wrt server!"
 
-    return render(request, 'app/owner.html',{'t': t})
+    return render(request, 'app/owner.html', {'t': t})
 
 
 def block_url(url, source_device_ip):
@@ -58,38 +58,38 @@ def block_url(url, source_device_ip):
     '''
 
     url_to_block = "app.hubbleconnected.com"
-    #get ip from dns
+    # get ip from dns
     ip = socket.gethostbyname(url_to_block)
     hex_ip = binascii.hexlify(socket.inet_aton(ip))
 
     f = open("/etc/snort/rules/local.rules", 'a')
-    rule = 'drop tcp any any <> hex_ip any (content: "web url"; msg: "Access Denied"; react:block; sid:1000015;'
-    f.write(rule)    
+    rule = 'drop tcp any any <>' + hex_ip + \
+        'any (content: "web url"; msg: "Access Denied"; react:block; sid:' + \
+        str(random.randint(1, 10) + 1000000) + ';'
+    f.write(rule)
 
+def get_server_mac_address():
+    return get_node()
+
+
+def add_owner(request):
+    host_ip = request.get_host().split(":")[0]
+
+    if len(Thing.objects.filter(ip_address=host_ip)) < 1:
+        unique_name = "server"
+        thing = Thing(name=unique_name, mac_address=get_server_mac_address(),
+                      ip_address=fetch_ip(mac), admin_or_not=True)
+        thing.save()
 
 def things(request):
-    '''
-    # read the log file and update context dictionary
-    # add to the events array
-    '''
-
-    # f = open('/var/log/snort/alert')
-    # for x in f.readlines():
-    #     split = x.split()
-    #     time_stamp = split[0]
-    #     packet_type = split[3]
-    #     packet_method = split[4]
-    #     destination = split[len(split) - 1]
-
-    #     event = time_stamp + "\t" + packet_type + \
-    #         "\t" + packet_method + " with " + destination
-    #     context[0]['events'].append(x)
-
     '''
     # detect new devices
     # check them in DB
     # if not present, add device in DB
     '''
+
+    add_owner(request)
+
     try:
         f = open("../../ap.log")
         for line in f.readlines():
