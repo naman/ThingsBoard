@@ -3,7 +3,7 @@ import random
 import string
 from app.models import *
 from uuid import getnode
-
+import netifaces
 import socket
 import binascii
 
@@ -68,8 +68,10 @@ def block_url(url, source_device_ip):
         str(random.randint(1, 10) + 1000000) + ';'
     f.write(rule)
 
+
 def get_server_mac_address():
-    return getnode()
+    x = netifaces.ifaddresses('eth0')[netifaces.AF_LINK][0]['addr']
+    return x
 
 
 def add_owner(request):
@@ -77,8 +79,9 @@ def add_owner(request):
 
     if len(Thing.objects.filter(ip_address=host_ip)) < 1:
         unique_name = "server"
-        thing = Thing(name=unique_name, mac_address=get_server_mac_address(),
-                      ip_address=fetch_ip(mac), admin_or_not=True)
+        mac = get_server_mac_address()
+        thing = Thing(name=unique_name, mac_address=mac,
+                      ip_address=host_ip, admin_or_not=True)
         thing.save()
 
 def things(request):
