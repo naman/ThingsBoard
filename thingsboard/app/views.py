@@ -2,7 +2,7 @@ from django.shortcuts import render
 import random
 import string
 from app.models import *
-from uuid import get_node
+from uuid import getnode
 
 import socket
 import binascii
@@ -69,7 +69,7 @@ def block_url(url, source_device_ip):
     f.write(rule)
 
 def get_server_mac_address():
-    return get_node()
+    return getnode()
 
 
 def add_owner(request):
