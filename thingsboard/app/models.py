@@ -28,6 +28,13 @@ class Thing(models.Model):
 
     """Internet of Things"""
 
+    location_choices = (
+        ('L', 'Living Room'),
+        ('B', 'Bedroom'),
+        ('W', 'Washroom'),
+        ('D', 'Dining Room'),
+    )
+
     urls_visited = models.ForeignKey(URL, null=True)
     permissions = models.ForeignKey(Permissions, null=True)
     connections = models.ForeignKey(Connections, null=True)
@@ -38,8 +45,11 @@ class Thing(models.Model):
     mac_address = models.CharField(
         "MAC Address", max_length=120)
     ip_address = models.CharField("IP address", max_length=120)
-    location = models.CharField("Location", max_length=120, null=True)
+    vendor = models.CharField("Vendor", max_length=120)
+    location = models.CharField(
+        "Location", choices=location_choices, default='D')
     admin_or_not = models.BooleanField(default=False)
+    outside_communication = models.BooleanField(default=True)
 
     def __str__(self):  # __unicode__ on Python 2
         return self.name

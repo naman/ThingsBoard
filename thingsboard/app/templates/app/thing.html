@@ -1,0 +1,19 @@
+{% extends "app/index.html" %} {% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <div align="center">
+            <br/>
+            <h1>t.name</h1>
+        </div>
+    </div>
+<div class="container">
+    <form role="form" class="form-horizontal" action="/things/{{t.id}}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
+    </form>
+</div>
+</div>
+{% endif %}
+</div>
+{% endblock %}
