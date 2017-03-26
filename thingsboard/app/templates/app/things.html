@@ -28,13 +28,13 @@
                     <br/> {% for s in t.state %} {{s.name}}
                     <br/> {% endfor %}
                     <strong>Permissions:</strong>
-                    <br/> {% for p in t.state %} {{p.name}}
+                    <br/> {% for p in t.permissions %} {{p.name}}
                     <br/> {% endfor %}
                     <strong>Connections:</strong>
                     <br/> {% for c in t.connections %} {{c.name}}
                     <br/> {% endfor %}
                     <strong>URLs visited:</strong>
-                    <br/> {% for u in t.state %} {{u.name}}
+                    <br/> {% for u in t.urls %} {{u.name}}
                     <br/> {% endfor %}
                     <strong>Form:</strong>
                 </div>

@@ -120,21 +120,12 @@ def add_owner(request):
 
 
 def things(request):
-    '''
-    # detect new devices
-    # check them in DB
-    # if not present, add device in DB
-    '''
-
     # add_owner(request)
-
     '''
     # get owner from the DB, if current request is from owner, show this page
     # else redirect to home
     '''
     source_ip = request.get_host().split(":")[0]
-    print source_ip
-    t = {}
 
     try:
         t = Thing.objects.get(ip_address=source_ip)
@@ -143,9 +134,14 @@ def things(request):
     except Exception:
         print "No owner wrt server!"
 
+    '''
+    # detect new devices
+    # check them in DB
+    # if not present, add device in DB
+    '''
     try:
         f = open("../../ap.log")
-        for line in f.readlines():
+        for line in f:
             if ("AP-STA-CONNECTED" in line):
                 spl = line.split()
                 mac = spl[3].strip()
@@ -163,9 +159,8 @@ def things(request):
                     print "Device already in the DB!"
     except Exception:
         print "No file called ap.log"
-    context = Thing.objects.all()
 
-    return render(request, 'app/things.html', {'things': context})
+    return render(request, 'app/things.html', {'things': Thing.objects.all()})
 
 
 def thing(thingid):
