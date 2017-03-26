@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{t.id}}" aria-controls="collapseExample{{t.id}}">
-                    <h3 class="panel-title" href="/things/{{ t.id }}">{{ t.name }}</h3>
+                    <h3 class="panel-title" href="/things/{{ t.id }}">{{t.vendor}} - {{ t.name }}</h3>
                 </div>
                 <div class="container panel-body collapse" id="collapseExample{{ t.id }}">
                     <strong> Description:</strong> {{ t.description }}
@@ -37,7 +37,6 @@
                     <br/> {% for u in t.state %} {{u.name}}
                     <br/> {% endfor %}
                     <strong>Form:</strong>
-                    <br/> {{ }}
                 </div>
             </div>
         </div>

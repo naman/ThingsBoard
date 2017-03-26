@@ -47,7 +47,7 @@ class Thing(models.Model):
     ip_address = models.CharField("IP address", max_length=120)
     vendor = models.CharField("Vendor", max_length=120)
     location = models.CharField(
-        "Location", choices=location_choices, default='D')
+        "Location", choices=location_choices, max_length=1, default='D')
     admin_or_not = models.BooleanField(default=False)
     outside_communication = models.BooleanField(default=True)
 
