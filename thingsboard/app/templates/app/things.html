@@ -24,33 +24,20 @@
                     <br/>
                     <strong>admin or not?: </strong> {{ t.admin_or_not }}
                     <br/>
-                    <strong>States:</strong>
-                    <br/> {% for s in t.state %} {{s.name}}
-                    <br/> {% endfor %}
-                    <strong>Permissions:</strong>
-                    <br/> {% for p in t.permissions %} {{p.name}}
-                    <br/> {% endfor %}
+
                     <strong>Connections:</strong>
-                    <br/> {% for c in t.connections %} {{c.name}}
+                    <br/> {% for c in t.connections.all %} 
+{{c.destination_address}}
+	{{c.type_of_connection}} {{c.visited}}
                     <br/> {% endfor %}
                     <strong>URLs visited:</strong>
-                    <br/> {% for u in t.urls %} {{u.name}}
+                    <br/> {% for u in t.urls_visited.all %} 
+{{u.name}} {{u.visited}}
                     <br/> {% endfor %}
-                    <strong>Form:</strong>
+
                 </div>
             </div>
         </div>
-        <!-- <div class="col-md-8">
-            Permissions {% for p in t.permissions %} {{p}} {{p.name}}
-            <br/> {% endfor %}
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-        </div> -->
         {% endfor %}
     </div>
     {% if not things %}
@@ -61,3 +48,4 @@
 {% endif %}
 </div>
 {% endblock %}
+

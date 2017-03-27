@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 import random
 import string
@@ -28,10 +29,10 @@ def add_connection(source_ip, dest_ip, type_conn, timestamp):
         t.save()
 
         c = t.connections
-        print "connection added to DB of", ip
+#        print "connection added to DB of", ip
     except Exception:
-        print "No owner wrt server!"
-
+#        print "No owner wrt server!"
+        pass
 
 def add_urls(source_ip, dest_url, timestamp):
     '''
@@ -47,9 +48,10 @@ def add_urls(source_ip, dest_url, timestamp):
         t.urls_visited.add(u)
         t.save()
 
-        print "URL added to DB of", ip
+ #       print "URL added to DB of", ip
     except Exception:
-        print "No owner wrt server!"
+#        print "No owner wrt server!"
+        pass
 
 
 def get_urls_connections(source_ip):
@@ -167,7 +169,7 @@ def things(request):
     # if not present, add device in DB
     '''
     try:
-        f = open("../../ap-srish.log")
+        f = open("../../ap.log")
         for line in f:
             if ("AP-STA-CONNECTED" in line):
                 spl = line.split()
@@ -175,19 +177,20 @@ def things(request):
                 if len(Thing.objects.filter(mac_address=mac)) < 1:
                     print "New device found!"
                     # add a new device, not already present
-                    unique_name = ''.join(random.choice(
-                        string.ascii_uppercase + string.digits)
-                        for _ in range(6))
+                    unique_name = "Device"
+                    ip = fetch_ip(mac)
                     thing = Thing(name=unique_name, mac_address=mac,
-                                  ip_address=fetch_ip(mac), admin_or_not=False,
+                                  ip_address=ip, admin_or_not=False,
                                   vendor=fetch_vendor(mac))
                     thing.save()
+                    get_urls_connections(ip)
                 else:
                     print "Device already in the DB!"
     except Exception:
-        print "No file called ap.log"
-
-    return render(request, 'app/things.html', {'things': Thing.objects.all()})
+        print "No file called ap-srish.log"
+    ts = Thing.objects.all()
+    print ts
+    return render(request, 'app/things.html', {'things': ts})
 
 
 def thing(thingid):
