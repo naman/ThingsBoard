@@ -10,6 +10,9 @@ import requests
 
 from app.forms import *
 
+#ip to url
+from ipwhois import IPWhois
+
 
 def add_connection(source_ip, dest_ip, type_conn, timestamp):
     '''
@@ -43,21 +46,32 @@ def add_urls(source_ip, dest_url, timestamp):
 def get_urls_connections(source_ip):
     f = open('/var/log/snort/alert')
     for l in f:
-        if ip in l and "tcp" in l:
+        if source_ip in l and "TCP" in l:
+            alert_tcp = l.split(" ")
             # get destination ip
+            dest_ip_tcp = alert[11]
             # get timestamp
-            # dest_ip =
+            timestamp_tcp = alert[0]
             # type of connection
-            # type_conn =
+            type_conn = alert[4]
 
             # add to the connections table of source ip
-            add_connection(source_ip, dest_ip, type_conn, timestamp)
-        if source_ip in l and "dns" in l:
+            add_connection(source_ip, dest_ip_tcp, type_conn, timestamp_tcp)
+        if source_ip in l and "DNS" in l:
             # get destination URL
-            # get timestamp
+            alert_dns = l.split(" ")
 
+            dest_ip_dns = alert[11]
+
+            #convert IP to URL
+            obj = IPWhois(dest_ip_dns)
+            dest_url = obj.lookup_rdap(depth=1)
+            
+            # get timestamp
+            timestamp_dns = alert[0]
+            
             # add to the urls table of source ip
-            add_urls(source_ip, dest_url, timestamp)
+            add_urls(source_ip, dest_url, timestamp_dns)
 
     f.close()
 
@@ -140,7 +154,7 @@ def things(request):
     # if not present, add device in DB
     '''
     try:
-        f = open("../../ap.log")
+        f = open("../../ap-srish.log")
         for line in f:
             if ("AP-STA-CONNECTED" in line):
                 spl = line.split()
