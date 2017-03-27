@@ -16,11 +16,18 @@ def add_connection(source_ip, dest_ip, type_conn, timestamp):
     add a new connection of type = TCP/UDP/ARP/DNS whatever
     '''
     try:
+
+        c = Connection(source_address=source_ip)
+        c.destination_address = dest_ip
+        c.type_of_connection = type_conn
+        c.visited = timestamp
+        c.save()
+
         t = Thing.objects.get(ip_address=source_ip)
-        t.destination_address = dest_ip
-        t.type_of_connection = type_conn
-        t.visited = timestamp
+        t.connections.add(c)
         t.save()
+
+        c = t.connections
         print "connection added to DB of", ip
     except Exception:
         print "No owner wrt server!"
@@ -31,10 +38,15 @@ def add_urls(source_ip, dest_url, timestamp):
     add a new URL
     '''
     try:
+
+        u = URL(name=dest_url)
+        u.visited = timestamp
+        u.save()
+
         t = Thing.objects.get(ip_address=source_ip)
-        t.name = dest_url
-        t.visited = timestamp
+        t.urls_visited.add(u)
         t.save()
+
         print "URL added to DB of", ip
     except Exception:
         print "No owner wrt server!"
