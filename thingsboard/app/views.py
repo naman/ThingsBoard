@@ -10,9 +10,6 @@ import requests
 
 from app.forms import *
 
-#ip to url
-from ipwhois import IPWhois
-
 
 def add_connection(source_ip, dest_ip, type_conn, timestamp):
     '''
@@ -24,9 +21,9 @@ def add_connection(source_ip, dest_ip, type_conn, timestamp):
         t.type_of_connection = type_conn
         t.visited = timestamp
         t.save()
+        print "connection added to DB of", ip
     except Exception:
         print "No owner wrt server!"
-    return 1
 
 
 def add_urls(source_ip, dest_url, timestamp):
@@ -38,9 +35,9 @@ def add_urls(source_ip, dest_url, timestamp):
         t.name = dest_url
         t.visited = timestamp
         t.save()
+        print "URL added to DB of", ip
     except Exception:
         print "No owner wrt server!"
-    return 1
 
 
 def get_urls_connections(source_ip):
@@ -49,11 +46,11 @@ def get_urls_connections(source_ip):
         if source_ip in l and "TCP" in l:
             alert_tcp = l.split(" ")
             # get destination ip
-            dest_ip_tcp = alert[11]
+            dest_ip_tcp = alert_tcp[11]
             # get timestamp
-            timestamp_tcp = alert[0]
+            timestamp_tcp = alert_tcp[0]
             # type of connection
-            type_conn = alert[4]
+            type_conn = alert_tcp[4]
 
             # add to the connections table of source ip
             add_connection(source_ip, dest_ip_tcp, type_conn, timestamp_tcp)
@@ -61,15 +58,19 @@ def get_urls_connections(source_ip):
             # get destination URL
             alert_dns = l.split(" ")
 
-            dest_ip_dns = alert[11]
+            dest_ip_dns = alert_dns[11]
 
-            #convert IP to URL
-            obj = IPWhois(dest_ip_dns)
-            dest_url = obj.lookup_rdap(depth=1)
-            
+            dest_url = ""
+            # convert IP to URL
+            try:
+                name, alias, addresslist = socket.gethostbyaddr(dest_ip_dns)
+                dest_url = name
+            except Exception:
+                print "No hostname found!"
+
             # get timestamp
-            timestamp_dns = alert[0]
-            
+            timestamp_dns = alert_dns[0]
+
             # add to the urls table of source ip
             add_urls(source_ip, dest_url, timestamp_dns)
 
