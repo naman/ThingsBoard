@@ -1,0 +1,13 @@
+{% extends "app/index.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
+<div class="container">
+    <div class="jumbotron text-center">
+       Add a URL
+    </div>
+    <div class="container">
+        <form role="form" class="form-horizontal" action="/addurl/" method="post" enctype="multipart/form-data">
+            {% csrf_token %} {% bootstrap_form form layout="horizontal" %} {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}

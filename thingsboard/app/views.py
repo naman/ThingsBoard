@@ -6,6 +6,7 @@ import requests
 
 from app.models import *
 from app.forms import *
+from django.utils import timezone
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -185,7 +186,6 @@ def things(request):
     except Exception:
         print "Some error"
     ts = Thing.objects.all()
-    print ts
     return render(request, 'app/things.html', {'things': ts})
 
 
@@ -208,3 +208,85 @@ def thing(request, thingid):
         return render(request, 'app/thing.html', context)
 
     return HttpResponseRedirect('/')
+
+
+def addurl(request):
+    """Open a new Project from admin side."""
+
+    if request.method == 'POST':
+        form = URLForm(request.POST, request.FILES)
+        if form.is_valid():
+            tosaveurl = form.save(commit=False)
+            tosaveurl.visited = timezone.now()
+            tosaveurl.save()
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'app/addurl.html', context)
+    else:
+        form = URLForm()
+        context = {'form': form}
+        return render(request, 'app/addurl.html', context)
+
+
+def addpermission(request):
+    """Open a new Project from admin side."""
+
+    if request.method == 'POST':
+        form = PermissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            tosaveurl = form.save(commit=False)
+            tosaveurl.createdon = timezone.now()
+            tosaveurl.save()
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'app/addpermission.html', context)
+    else:
+        form = PermissionForm()
+        context = {'form': form}
+        return render(request, 'app/addpermission.html', context)
+
+
+def addroom(request):
+    """Open a new Project from admin side."""
+
+    if request.method == 'POST':
+        form = RoomForm(request.POST, request.FILES)
+        if form.is_valid():
+            tosaveurl = form.save(commit=False)
+            tosaveurl.createdon = timezone.now()
+            tosaveurl.save()
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'app/addroom.html', context)
+    else:
+        form = RoomForm()
+        context = {'form': form}
+        return render(request, 'app/addroom.html', context)
+
+
+def addtype(request):
+    """Open a new Project from admin side."""
+
+    if request.method == 'POST':
+        form = TypeForm(request.POST, request.FILES)
+        if form.is_valid():
+            tosaveurl = form.save(commit=False)
+            tosaveurl.createdon = timezone.now()
+            tosaveurl.save()
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'app/addtype.html', context)
+    else:
+        form = TypeForm()
+        context = {'form': form}
+        return render(request, 'app/addtype.html', context)
+
+
+def stats(request):
+    """Calculating statistics for the statistics page."""
+    context = {}
+    return render(request, 'jobport/stats.html', context)

@@ -11,31 +11,56 @@ class Connection(models.Model):
     type_of_connection = models.CharField("Connection Type", max_length=120)
     visited = models.DateTimeField(auto_now_add=True)
 
-
-class Permission(models.Model):
-    name = models.CharField("Name", max_length=120)
+    def __str__(self):  # __unicode__ on Python 2
+        return self.source_address + ' - ' + self.destination_address
 
 
 class URL(models.Model):
     name = models.CharField("Name", max_length=120)
     visited = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
+
+
+class Permission(models.Model):
+    name = models.CharField("Name", max_length=120)
+    urls = models.ManyToManyField(
+        URL, related_name='urls_of_perm', null=True, blank=True)
+    block = models.BooleanField(default=True)
+    createdon = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
+
 
 class State(models.Model):
     name = models.CharField("Name", max_length=120)
     visited = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
 
 
 class Room(models.Model):
     """docstring for Room"""
     name = models.CharField("Name", max_length=120)
     permissions = models.ManyToManyField(Permission)
+    createdon = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
 
 
 class Thing_Type(models.Model):
     """docstring for Type"""
     name = models.CharField("Name", max_length=120)
-    permissions = models.ManyToManyField(Permission)
+    permissions = models.ManyToManyField(
+        Permission, related_name='perms_of_type', null=True, blank=True)
+    createdon = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
 
 
 class Thing(models.Model):

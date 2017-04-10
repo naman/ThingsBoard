@@ -27,14 +27,18 @@
                 <ul class="nav navbar-nav">
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <!-- <li><a href="/things">Things</a></li> -->
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/addurl">Add URL</a></li>
+                    <li><a href="/addpermission">Add Permission</a></li>
+                    <li><a href="/addroom">Add Room</a></li>
+                    <li><a href="/addtype">Add Type</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
     </nav>
     <a href="#" style="right: 70px;" class="btn back-to-top btn-dark btn-fixed-bottom"> <span class="glyphicon glyphicon-chevron-up"></span> </a>
-        {% for message in messages %} {% ifequal message.tags "error" %}
+    {% for message in messages %} {% ifequal message.tags "error" %}
     <div class="alert alert-danger alert-dismissable" style="margin-top:50px;margin-bottom:-5px">
         <button type="button" class="close" data-dismiss="alert">x</button>
         <p>{{ message }}</p>
@@ -44,17 +48,13 @@
         <button type="button" class="close" data-dismiss="alert">x</button>
         <p>{{ message }}</p>
     </div>
-    {% endifequal %} {% endfor %}
-        {% block content %}
-        {% endblock %}
-
+    {% endifequal %} {% endfor %} {% block content %} {% endblock %}
     <script src="{% static "js/jquery-2.1.1.min.js" %}"></script>
     <script src="{% static "js/showup.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
     <script src="{% static "js/ripples.js" %}"></script>
     <script src="{% static "js/material.min.js" %}"></script>
     <script>
-
     $().showUp('.navbar', {
         upClass: 'navbar-show',
         downClass: 'navbar-hide'
