@@ -1,19 +1,23 @@
-{% extends "app/index.html" %} {% block content %}
+{% extends "app/index.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
 <div class="container">
-    <div class="jumbotron">
-        <div align="center">
-            <br/>
-            <h1>t.name</h1>
-        </div>
+    <div class="jumbotron text-center">
+        <br/>
+        <h1>{{t.name}}</h1>
+        <strong>Connections:</strong>
+        <br/> {% for c in t.connections.all %} {{c.destination_address}} {{c.type_of_connection}} {{c.visited}}
+        <br/> {% endfor %}
+        <strong>URLs visited:</strong>
+        <br/> {% for u in t.urls_visited.all %} {{u.name}} {{u.visited}}
+        <br/> {% endfor %}
+        <strong>States:</strong>
+        <br/> {% for s in t.urls_visited.all %} {{s.name}} {{s.visited}}
+        <br/> {% endfor %}
     </div>
-<div class="container">
-    <form role="form" class="form-horizontal" action="/things/{{t.id}}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% bootstrap_form form layout="horizontal" %}
-        {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
-    </form>
+    <div class="container">
+        <form role="form" class="form-horizontal" action="/things/{{ t.id }}/" method="post" enctype="multipart/form-data">
+            {% csrf_token %} {% bootstrap_form form layout="horizontal" %} {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
+        </form>
+    </div>
 </div>
-</div>
-{% endif %}
 </div>
 {% endblock %}

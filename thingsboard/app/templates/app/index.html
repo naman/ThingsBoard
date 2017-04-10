@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    {% load staticfiles %}
     <title>ThingsBoard</title>
     <link rel="stylesheet" href="{% static "css/showup.css" %}"> {% block pagelibraries %}{% endblock %}
     <link href="{% static "css/bootstrap.min.css"%}" rel="stylesheet">
@@ -28,19 +27,26 @@
                 <ul class="nav navbar-nav">
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/things">Things</a></li>
+                    <!-- <li><a href="/things">Things</a></li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
     </nav>
     <a href="#" style="right: 70px;" class="btn back-to-top btn-dark btn-fixed-bottom"> <span class="glyphicon glyphicon-chevron-up"></span> </a>
-    <div class="container">
-        <br/> {% block content %}
-        {% endblock %}
-        </ul>
-
+        {% for message in messages %} {% ifequal message.tags "error" %}
+    <div class="alert alert-danger alert-dismissable" style="margin-top:50px;margin-bottom:-5px">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <p>{{ message }}</p>
     </div>
+    {% else %}
+    <div class="alert alert-{{message.tags}} alert-dismissable" style="margin-top:50px">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <p>{{ message }}</p>
+    </div>
+    {% endifequal %} {% endfor %}
+        {% block content %}
+        {% endblock %}
 
     <script src="{% static "js/jquery-2.1.1.min.js" %}"></script>
     <script src="{% static "js/showup.js" %}"></script>

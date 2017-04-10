@@ -1,40 +1,25 @@
 {% extends "app/index.html" %} {% block content %}
 <div class="container">
-    <div class="jumbotron">
-        <div align="center">
-            <br/>
-            <h1>Things</h1>
-        </div>
-    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <div class="row">
         {% for t in things %}
-        <div class="col-md-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{t.id}}" aria-controls="collapseExample{{t.id}}">
-                    <h3 class="panel-title" href="/things/{{ t.id }}">{{t.vendor}} - {{ t.name }}</h3>
-                </div>
-                <div class="container panel-body collapse" id="collapseExample{{ t.id }}">
-                    <strong> Description:</strong> {{ t.description }}
-                    <br/>
-                    <strong>MAC:</strong> {{ t.mac_address }}
-                    <br/>
-                    <strong>IP:</strong> {{ t.ip_address }}
-                    <br/>
-                    <strong>Location: </strong> {{ t.get_location_display }}
-                    <br/>
-                    <strong>admin or not?: </strong> {{ t.admin_or_not }}
-                    <br/>
-
-                    <strong>Connections:</strong>
-                    <br/> {% for c in t.connections.all %} 
-{{c.destination_address}}
-	{{c.type_of_connection}} {{c.visited}}
-                    <br/> {% endfor %}
-                    <strong>URLs visited:</strong>
-                    <br/> {% for u in t.urls_visited.all %} 
-{{u.name}} {{u.visited}}
-                    <br/> {% endfor %}
-
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <div class="card">
+                <div class="card-height-indicator"></div>
+                <div class="card-content">
+                    <div class="card-image">
+                        <a href="/things/{{ t.id }}"> <img src="files/{{ t.image_file }}" alt="Loading image...">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <a href="/things/{{ t.id }}">
+                            <h4 style="margin-top: -2px">{{ t.name }}</h4>
+                        </a>
+                        <h5 style="margin-top: -2px">{{ t.vendor }}</h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,4 +33,3 @@
 {% endif %}
 </div>
 {% endblock %}
-

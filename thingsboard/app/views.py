@@ -1,15 +1,14 @@
-
-from django.shortcuts import render
 import random
-import string
-from app.models import *
-# from uuid import getnode
 import netifaces
 import socket
 import binascii
 import requests
 
+from app.models import *
 from app.forms import *
+from django.shortcuts import render
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 
 def add_connection(source_ip, dest_ip, type_conn, timestamp):
@@ -31,8 +30,9 @@ def add_connection(source_ip, dest_ip, type_conn, timestamp):
         c = t.connections
 #        print "connection added to DB of", ip
     except Exception:
-#        print "No owner wrt server!"
+        #        print "No owner wrt server!"
         pass
+
 
 def add_urls(source_ip, dest_url, timestamp):
     '''
@@ -48,9 +48,9 @@ def add_urls(source_ip, dest_url, timestamp):
         t.urls_visited.add(u)
         t.save()
 
- #       print "URL added to DB of", ip
+        # print "URL added to DB of", ip
     except Exception:
-#        print "No owner wrt server!"
+        # print "No owner wrt server!"
         pass
 
 
@@ -107,10 +107,6 @@ def fetch_ip(mac):
     return ip
 
 
-def index(request):
-    return render(request, 'app/index.html')
-
-
 def block_url(url, source_device_ip):
     '''
     # take url,
@@ -154,14 +150,15 @@ def things(request):
     # get owner from the DB, if current request is from owner, show this page
     # else redirect to home
     '''
-    source_ip = request.get_host().split(":")[0]
+    # source_ip = request.get_host().split(":")[0]
+    # print source_ip
 
-    try:
-        t = Thing.objects.get(ip_address=source_ip)
-        t.admin_or_not = True
-        t.save()
-    except Exception:
-        print "No owner wrt server!"
+    # try:
+    #     t = Thing.objects.get(ip_address=source_ip)
+    #     t.admin_or_not = True
+    #     t.save()
+    # except Exception:
+    #     print "No owner wrt server!"
 
     '''
     # detect new devices
@@ -174,26 +171,40 @@ def things(request):
             if ("AP-STA-CONNECTED" in line):
                 spl = line.split()
                 mac = spl[3].strip()
-                if len(Thing.objects.filter(mac_address=mac)) < 1:
+                if not Thing.objects.filter(mac_address=mac):
                     print "New device found!"
                     # add a new device, not already present
-                    unique_name = "Device"
+                    unique_name = "IoT Device"
                     ip = fetch_ip(mac)
                     thing = Thing(name=unique_name, mac_address=mac,
-                                  ip_address=ip, admin_or_not=False,
-                                  vendor=fetch_vendor(mac))
+                                  ip_address=ip, vendor=fetch_vendor(mac))
                     thing.save()
                     get_urls_connections(ip)
                 else:
                     print "Device already in the DB!"
     except Exception:
-        print "No file called ap-srish.log"
+        print "Some error"
     ts = Thing.objects.all()
     print ts
     return render(request, 'app/things.html', {'things': ts})
 
 
-def thing(thingid):
-    t = Article.objects.get(pk=thingid)
-    f = ThingForm(instance=t)
-    return render(request, 'app/thing.html', {'thing': f})
+def thing(request, thingid):
+    t = Thing.objects.get(pk=thingid)
+    if request.method == 'POST':
+        form = ThingForm(request.POST, request.FILES, instance=t)
+        if form.is_valid():
+            thing = form.save(commit=False)
+            thing.save()
+            messages.success(
+                request, 'Your details were saved. Welcome!')
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form, 't': t}
+            return render(request, 'app/thing.html', context)
+    elif request.method == 'GET':
+        form = ThingForm(instance=t)
+        context = {'form': form, 't': t}
+        return render(request, 'app/thing.html', context)
+
+    return HttpResponseRedirect('/')

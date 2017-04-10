@@ -85,4 +85,5 @@ venv/
 ENV/
 
 thingsboard/app/migrations
-thingsboard/ThingsBoard.db
+#thingsboard/ThingsBoard.db
+thingsboard/static/

@@ -6,4 +6,4 @@ from app.models import Thing
 class ThingForm(ModelForm):
     class Meta:
         model = Thing
-        fields = ['location', 'admin_or_not']
+        exclude = ['urls_visited', 'permissions', 'connections', 'states']
