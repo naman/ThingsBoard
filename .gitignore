@@ -87,3 +87,5 @@ ENV/
 thingsboard/app/migrations
 #thingsboard/ThingsBoard.db
 thingsboard/static/
+
+.idea/
