@@ -3,7 +3,7 @@
     <div class="jumbotron text-center">
         <br/>
         <h1>{{t.name}}</h1>
-        <strong>Connections:</strong>
+  <!--       <strong>Connections:</strong>
         <br/> {% for c in t.connections.all %} {{c.destination_address}} {{c.type_of_connection}} {{c.visited}}
         <br/> {% endfor %}
         <strong>URLs visited:</strong>
@@ -11,7 +11,7 @@
         <br/> {% endfor %}
         <strong>States:</strong>
         <br/> {% for s in t.urls_visited.all %} {{s.name}} {{s.visited}}
-        <br/> {% endfor %}
+        <br/> {% endfor %} -->
     </div>
     <div class="container">
         <form role="form" class="form-horizontal" action="/things/{{ t.id }}/" method="post" enctype="multipart/form-data">

@@ -68,6 +68,7 @@ class Owner(models.Model):
     name = models.CharField("Name", max_length=120)
     permissions = models.ManyToManyField(
         Permission, related_name='perms_of_owner', null=True, blank=True)
+    parent = models.BooleanField(default=False)
     createdon = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):  # __unicode__ on Python 2
