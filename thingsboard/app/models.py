@@ -1,5 +1,4 @@
 from django.db import models
-
 from storage import OverwriteStorage
 
 
@@ -45,7 +44,8 @@ class State(models.Model):
 class Room(models.Model):
     """docstring for Room"""
     name = models.CharField("Name", max_length=120)
-    permissions = models.ManyToManyField(Permission)
+    permissions = models.ManyToManyField(
+        Permission, related_name='perms_of_room', null=True, blank=True)
     createdon = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):  # __unicode__ on Python 2
@@ -63,22 +63,33 @@ class Thing_Type(models.Model):
         return self.name
 
 
+class Owner(models.Model):
+    """docstring for Type"""
+    name = models.CharField("Name", max_length=120)
+    permissions = models.ManyToManyField(
+        Permission, related_name='perms_of_owner', null=True, blank=True)
+    createdon = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
+
+
 class Thing(models.Model):
 
     """Internet of Things"""
 
     urls_visited = models.ManyToManyField(
         URL, related_name='things_of_url', null=True, blank=True)
-    permissions = models.ManyToManyField(
-        Permission, related_name='things_of_perm', null=True, blank=True)
     connections = models.ManyToManyField(
         Connection, related_name='things_of_conn', null=True, blank=True)
     states = models.ManyToManyField(
         State, related_name='things_of_state', null=True, blank=True)
     rooms = models.ManyToManyField(
         Room, related_name='things_of_room', null=True, blank=True)
-    thing_type = models.ManyToManyField(
+    thing_types = models.ManyToManyField(
         Thing_Type, related_name='things_of_type', null=True, blank=True)
+    owners = models.ManyToManyField(
+        Owner, related_name='things_of_owner', null=True, blank=True)
 
     name = models.CharField("Name", max_length=120)
     description = models.CharField("Description", max_length=120, null=True)

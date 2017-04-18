@@ -10,6 +10,13 @@ from django.utils import timezone
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.views.generic.base import TemplateView
+
+
+import plotly.plotly as py
+import plotly.offline as opy
+import plotly.graph_objs as go
+import pandas as pd
 
 
 def add_connection(source_ip, dest_ip, type_conn, timestamp):
@@ -248,6 +255,25 @@ def addpermission(request):
         return render(request, 'app/addpermission.html', context)
 
 
+def addowner(request):
+    """Open a new Project from admin side."""
+
+    if request.method == 'POST':
+        form = OwnerForm(request.POST, request.FILES)
+        if form.is_valid():
+            tosaveurl = form.save(commit=False)
+            tosaveurl.createdon = timezone.now()
+            tosaveurl.save()
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'app/addowner.html', context)
+    else:
+        form = OwnerForm()
+        context = {'form': form}
+        return render(request, 'app/addowner.html', context)
+
+
 def addroom(request):
     """Open a new Project from admin side."""
 
@@ -286,7 +312,54 @@ def addtype(request):
         return render(request, 'app/addtype.html', context)
 
 
-def stats(request):
-    """Calculating statistics for the statistics page."""
-    context = {}
-    return render(request, 'jobport/stats.html', context)
+class Graph(TemplateView):
+    template_name = 'app/stats.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Graph, self).get_context_data(**kwargs)
+
+        x = [-2, 0, 4, 6, 7]
+        y = [q**2 - q + 3 for q in x]
+        trace1 = go.Scatter(x=x, y=y, marker={'color': 'red', 'symbol': 104, 'size': "10"},
+                            mode="lines", name='1st Trace')
+
+        data = go.Data([trace1])
+        layout = go.Layout(title="Meine Daten", xaxis={
+                           'title': 'x1'}, yaxis={'title': 'x2'})
+        figure = go.Figure(data=data, layout=layout)
+        div = opy.plot(figure, auto_open=False, output_type='div')
+
+        context['graph'] = div
+
+        return context
+
+
+def draw():
+
+    df = pd.read_csv(
+        "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
+
+    trace_high = go.Scatter(
+        x=df.Date,
+        y=df['AAPL.High'],
+        name="AAPL High",
+        line=dict(color='#17BECF'),
+        opacity=0.8)
+
+    trace_low = go.Scatter(
+        x=df.Date,
+        y=df['AAPL.Low'],
+        name="AAPL Low",
+        line=dict(color='#7F7F7F'),
+        opacity=0.8)
+
+    data = [trace_high, trace_low]
+
+    layout = dict(
+        title="Manually Set Date Range",
+        xaxis=dict(
+            range=['2016-07-01', '2016-12-31'])
+    )
+
+    fig = dict(data=data, layout=layout)
+    py.iplot(fig, filename="Manually Set Range")
