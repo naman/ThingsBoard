@@ -1,5 +1,6 @@
 alabaster==0.7.6
 Babel==2.0
+decorator==4.0.11
 Django==1.6.10
 django-bootstrap3==5.0.3
 django-bootstrap3-datetimepicker==2.2.3
@@ -8,15 +9,24 @@ django-suit==0.2.12
 django-timezone-field==1.1
 dnspython==1.15.0
 docutils==0.12
+enum34==1.1.6
+functools32==3.2.3.post2
 html2text==2014.12.5
 ipaddr==2.1.11
 ipwhois==0.15.1
+ipython-genutils==0.2.0
 Jinja2==2.8
+jsonschema==2.6.0
+jupyter-core==4.3.0
 MarkupSafe==1.0
+nbformat==4.3.0
 netifaces==0.10.5
+numpy==1.12.1
 oauthlib==2.0.1
 olefile==0.44
+pandas==0.19.2
 Pillow==4.1.0
+plotly==2.0.7
 PyJWT==0.3.1
 python-dateutil==2.3
 python-ptrace==0.8.1
@@ -26,3 +36,4 @@ requests-oauthlib==0.4.2
 six==1.8.0
 snowballstemmer==1.2.0
 South==1.0.1
+traitlets==4.3.2
