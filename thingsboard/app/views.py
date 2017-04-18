@@ -3,6 +3,9 @@ import netifaces
 import socket
 import binascii
 import requests
+import plotly.offline as opy
+import plotly.graph_objs as go
+import pandas as pd
 
 from app.models import *
 from app.forms import *
@@ -11,12 +14,6 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views.generic.base import TemplateView
-
-
-import plotly.plotly as py
-import plotly.offline as opy
-import plotly.graph_objs as go
-import pandas as pd
 
 
 def add_connection(source_ip, dest_ip, type_conn, timestamp):
@@ -338,7 +335,7 @@ class Graph(TemplateView):
         trace_high = go.Scatter(
             x=df.Date,
             y=df['AAPL.High'],
-            name=Thing.objects.get(pk=1).name,
+            name=Thing.objects.get(pk=3).name,
             line=dict(color=color1),
             opacity=0.8)
 
@@ -352,7 +349,7 @@ class Graph(TemplateView):
         trace_mavg = go.Scatter(
             x=df.Date,
             y=df['mavg'] - random.randint(1, 100),
-            name=Thing.objects.get(pk=3).name,
+            name=Thing.objects.get(pk=1).name,
             line=dict(color=color3),
             opacity=0.8)
 
@@ -377,7 +374,7 @@ class Graph(TemplateView):
         trace1 = go.Bar(
             x=all_urls,
             y=[random.randint(1, 100) for x in xrange(len(all_urls))],
-            name=Thing.objects.get(pk=1).name,
+            name=Thing.objects.get(pk=3).name,
             marker=dict(
                 color=color1
             )
@@ -395,7 +392,7 @@ class Graph(TemplateView):
         trace3 = go.Bar(
             x=all_urls,
             y=[random.randint(1, 100) for x in xrange(len(all_urls))],
-            name=Thing.objects.get(pk=3).name,
+            name=Thing.objects.get(pk=1).name,
             marker=dict(
                 color=color3
             )
