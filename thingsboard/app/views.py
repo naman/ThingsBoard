@@ -312,7 +312,7 @@ class Graph(TemplateView):
         data = [trace_high]
 
         layout = dict(
-            title="Bandwidth consumption (in KB",
+            title="Bandwidth consumption (in MB)",
             xaxis=dict(
                 range=['2016-12-01', '2017-2-28'])
         )
