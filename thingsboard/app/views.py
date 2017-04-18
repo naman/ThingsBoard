@@ -320,6 +320,9 @@ class Graph(TemplateView):
         figure = go.Figure(data=data, layout=layout)
         div = opy.plot(figure, auto_open=False, output_type='div')
 
-        context['graph'] = div
+        context['consumption_graph'] = div
+
+        # add new graph here
+        context['urls_graph'] = div
 
         return context
