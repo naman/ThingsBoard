@@ -121,9 +121,8 @@ def block_url(url, source_device_ip):
     # give a unique sid for the rule
     '''
 
-    url_to_block = "app.hubbleconnected.com"
     # get ip from dns
-    ip = socket.gethostbyname(url_to_block)
+    ip = socket.gethostbyname(url)
     hex_ip = binascii.hexlify(socket.inet_aton(ip))
 
     f = open("/etc/snort/rules/local.rules", 'a')
