@@ -1,9 +1,11 @@
 {% extends "app/index.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
+</br>
+</br>
+</br>
 <div class="container">
     <div class="jumbotron text-center">
-       Add a Type
-    </div>
-    <div class="container">
+        <h1>Add a Device Type</h1>
+    </div>    <div class="container">
         <form role="form" class="form-horizontal" action="/addtype/" method="post" enctype="multipart/form-data">
             {% csrf_token %} {% bootstrap_form form layout="horizontal" %} {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
         </form>

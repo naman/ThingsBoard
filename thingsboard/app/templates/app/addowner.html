@@ -1,13 +1,14 @@
 {% extends "app/index.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
+</br>
+</br>
+</br>
 <div class="container">
     <div class="jumbotron text-center">
-       Add an Owner
+        <h1>Add an Owner</h1>
     </div>
-    <div class="container">
-        <form role="form" class="form-horizontal" action="/addowner/" method="post" enctype="multipart/form-data">
-            {% csrf_token %} {% bootstrap_form form layout="horizontal" %} {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
-        </form>
-    </div>
+    <form role="form" class="form-horizontal" action="/addowner/" method="post" enctype="multipart/form-data">
+        {% csrf_token %} {% bootstrap_form form layout="horizontal" %} {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
+    </form>
 </div>
 </div>
 {% endblock %}

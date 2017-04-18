@@ -217,25 +217,6 @@ def thing(request, thingid):
     return HttpResponseRedirect('/')
 
 
-def addurl(request):
-    """Open a new Project from admin side."""
-
-    if request.method == 'POST':
-        form = URLForm(request.POST, request.FILES)
-        if form.is_valid():
-            tosaveurl = form.save(commit=False)
-            tosaveurl.visited = timezone.now()
-            tosaveurl.save()
-            return HttpResponseRedirect('/')
-        else:
-            context = {'form': form}
-            return render(request, 'app/addurl.html', context)
-    else:
-        form = URLForm()
-        context = {'form': form}
-        return render(request, 'app/addurl.html', context)
-
-
 def addpermission(request):
     """Open a new Project from admin side."""
 
