@@ -226,6 +226,8 @@ def addpermission(request):
             tosaveurl = form.save(commit=False)
             tosaveurl.createdon = timezone.now()
             tosaveurl.save()
+            messages.success(
+                request, 'Your details were saved. Welcome!')
             return HttpResponseRedirect('/')
         else:
             context = {'form': form}
@@ -245,6 +247,8 @@ def addowner(request):
             tosaveurl = form.save(commit=False)
             tosaveurl.createdon = timezone.now()
             tosaveurl.save()
+            messages.success(
+                request, 'Your details were saved. Welcome!')
             return HttpResponseRedirect('/')
         else:
             context = {'form': form}
@@ -264,6 +268,8 @@ def addroom(request):
             tosaveurl = form.save(commit=False)
             tosaveurl.createdon = timezone.now()
             tosaveurl.save()
+            messages.success(
+                request, 'Your details were saved. Welcome!')
             return HttpResponseRedirect('/')
         else:
             context = {'form': form}
@@ -272,6 +278,27 @@ def addroom(request):
         form = RoomForm()
         context = {'form': form}
         return render(request, 'app/addroom.html', context)
+
+
+def addurl(request):
+    """Open a new Project from admin side."""
+
+    if request.method == 'POST':
+        form = URLForm(request.POST, request.FILES)
+        if form.is_valid():
+            tosaveurl = form.save(commit=False)
+            tosaveurl.createdon = timezone.now()
+            tosaveurl.save()
+            messages.success(
+                request, 'Your details were saved. Welcome!')
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'app/addurl.html', context)
+    else:
+        form = URLForm()
+        context = {'form': form}
+        return render(request, 'app/addurl.html', context)
 
 
 def addtype(request):
@@ -283,6 +310,8 @@ def addtype(request):
             tosaveurl = form.save(commit=False)
             tosaveurl.createdon = timezone.now()
             tosaveurl.save()
+            messages.success(
+                request, 'Your details were saved. Welcome!')
             return HttpResponseRedirect('/')
         else:
             context = {'form': form}
@@ -299,22 +328,44 @@ class Graph(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Graph, self).get_context_data(**kwargs)
 
+        color1 = "#3F51B5"
+        color2 = "#757575"
+        color3 = "#FFC107"
+
         df = pd.read_csv(
             "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
 
         trace_high = go.Scatter(
             x=df.Date,
             y=df['AAPL.High'],
-            name="Data Consumption",
-            line=dict(color='#303F9F'),
+            name=Thing.objects.get(pk=1).name,
+            line=dict(color=color1),
             opacity=0.8)
 
-        data = [trace_high]
+        trace_low = go.Scatter(
+            x=df.Date,
+            y=df['up'] - random.randint(1, 100),
+            name=Thing.objects.get(pk=2).name,
+            line=dict(color=color2),
+            opacity=0.8)
+
+        trace_mavg = go.Scatter(
+            x=df.Date,
+            y=df['mavg'] - random.randint(1, 100),
+            name=Thing.objects.get(pk=3).name,
+            line=dict(color=color3),
+            opacity=0.8)
+
+        data = [trace_high, trace_low, trace_mavg]
 
         layout = dict(
             title="Bandwidth consumption (in MB)",
             xaxis=dict(
-                range=['2016-12-01', '2017-2-28'])
+                title='Time',
+                range=['2016-12-01', '2017-2-28']),
+            yaxis=dict(
+                title='Data Consumption (in MB)',
+            ),
         )
 
         figure = go.Figure(data=data, layout=layout)
@@ -322,7 +373,47 @@ class Graph(TemplateView):
 
         context['consumption_graph'] = div
 
-        # add new graph here
-        context['urls_graph'] = div
+        all_urls = [x.name for x in URL.objects.all()]
+        trace1 = go.Bar(
+            x=all_urls,
+            y=[random.randint(1, 100) for x in xrange(len(all_urls))],
+            name=Thing.objects.get(pk=1).name,
+            marker=dict(
+                color=color1
+            )
+        )
+
+        trace2 = go.Bar(
+            x=all_urls,
+            y=[random.randint(1, 100) for x in xrange(len(all_urls))],
+            name=Thing.objects.get(pk=2).name,
+            marker=dict(
+                color=color2
+            )
+        )
+
+        trace3 = go.Bar(
+            x=all_urls,
+            y=[random.randint(1, 100) for x in xrange(len(all_urls))],
+            name=Thing.objects.get(pk=3).name,
+            marker=dict(
+                color=color3
+            )
+        )
+        data = [trace1, trace2, trace3]
+        layout = go.Layout(
+            title='URLs visited with frequency',
+            yaxis=dict(
+                title='Frequency',
+            ),
+            barmode='group',
+            bargap=0.15,
+            bargroupgap=0.1
+        )
+
+        figure = go.Figure(data=data, layout=layout)
+        div1 = opy.plot(figure, auto_open=False, output_type='div')
+
+        context['urls_graph'] = div1
 
         return context

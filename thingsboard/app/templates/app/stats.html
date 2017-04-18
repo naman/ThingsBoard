@@ -6,6 +6,8 @@
     <div class="jumbotron text-center">
         <h1>Statistics</h1>
     </div>
-    {% if urls_graph %} {{ urls_graph|safe }} {% endif %} {% if consumption_graph %} {{ consumption_graph|safe }} {% endif %}
+     {% if consumption_graph %} {{ consumption_graph|safe }} {% endif %}
+     <br/>
+    {% if urls_graph %} {{ urls_graph|safe }} {% endif %}
 </div>
 {% endblock %}

@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^addtype/$', views.addtype, name='addtype'),
     url(r'^addroom/$', views.addroom, name='addroom'),
     url(r'^addowner/$', views.addowner, name='addowner'),
+    url(r'^addurl/$', views.addurl, name='addurl'),
 ]
