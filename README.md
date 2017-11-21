@@ -1,5 +1,5 @@
 # ThingsBoard
-A dashboard for tracking IoT activity + IDS
+A dashboard for tracking IoT activity + IDS. Please read the paper for further information: http://ieeexplore.ieee.org/document/7945418/
 
 # Overview
 
