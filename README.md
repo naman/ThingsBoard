@@ -19,7 +19,7 @@ We have used hostapd to configure RPi as an access point and setup dnsmasq (to b
 
 ### Firewall/Intrusion Detection System + Dashboard
 
-We have used Snort IDS to identify various types of connections, attacks and log them in files. We used Django to make a frontend web UI, which acts as an interface to for tweaking Snort configuration and parse the logs (mentioned earlier) in order to display the status of the IoT device, and the connections that it makes in realtime etc..
+We have used Snort IDS to identify various types of connections, attacks and log them in files. We used Django to make a frontend web UI, which acts as an interface to for tweaking Snort configuration and parse the logs (mentioned earlier) in order to display the status of the IoT device, and the connections that it makes in realtime etc. Please read the interface logic in Django views (https://github.com/naman/ThingsBoard/blob/master/thingsboard/app/views.py).
 
 # Installation
 
